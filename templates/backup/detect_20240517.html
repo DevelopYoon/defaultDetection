@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YOLO Model IMAGE DETECTOR</title>
+  <!-- <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">  20240516 수정 전 -->  
+  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+
+<div class="container-fluid bg-white py-5" style="margin-bottom: 100px;">
+      <div class="d-flex flex-column align-items-center justify-content-center text-center h-100 bg-primary p-4">
+            <h1 class="m-1 text-white" style="font-family: 'NanumSquareExtraBold';">결함 이미지 검출기</h1>
+          </div>
+          
+          <div class="align-items-center justify-content-center text text-center bg-light py-4 p-4">
+            
+            <p class="fs-6 "><strong>컨볼루션 신경망(CNN) 시스템</strong>을 통하여 <strong>딥 러닝</strong>으로</p>             
+            <p class="fs-6 "><strong>2차원 이미지의 균열을 분석</strong>하여 검출합니다.</p>
+            <p class="fs-6 ">* 약 1만 여장의 균열이 발생한 실제 이미지를 통해 학습 된 테스트 모델입니다.</p>
+            
+          </div>
+      <div class="d-flex flex-column align-items-center justify-content-center text-center h-100 p-4">
+              
+            <div class="row justify-content-center">
+              <div class="card justify-content-center" style="border-radius: 10px;">            
+              <!-- 결과 값 출력 위치 -->
+              <div class="Result justify-content-center" style="max-width: 95vw; align-items: center;">
+                  {% if image_path %}
+                  <div class="text-center py-5" style="font-family: 'NanumSquareExtraBold';">
+                    <h2>검출 결과</h2>
+                    <h6>Prediction Result</h6>
+                    <img src="{{ image_path }}" style="max-width: 85vw; align-items: center;" alt="Uploaded Image" >
+                  </div>
+                {% else %}
+                
+                {% endif %}
+              </div>
+              <!-- 결과 값 출력 위치 -->
+
+              <div class="photos-upload-view" style="max-width: 85vw;">
+          <div class="image-preview mb-3 justify-content-center" style="max-width: 85vw;" id="imagePreview"></div> 
+              <form id="upload" action="/" method="POST" enctype="multipart/form-data">
+                  <div class="upload-btn-wrapper">           
+                    <div class="input-group mb-3 justify-content-center" style="align-items: center;">
+                      
+                      <input class="form-control-lg" type="file" value="Upload" name="image"accept="image/*"id="imageUpload">
+                      <button class="btn btn-secondary btn-lg">검출</button>
+                      <input class="btn btn-dark btn-lg" type="submit" value="초기화">
+                    </div>
+                  </div>
+              </form>
+           
+          
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> 
+  </div>
+</div>
+
+</div>
+
+<script>
+  document.querySelector('.btn-primary').addEventListener('click', function() {
+      document.getElementById('imageUpload').click();
+  });
+
+  document.getElementById('imageUpload').addEventListener('change', function() {
+      const file = this.files[0];
+      if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+              const imagePreview = document.getElementById('imagePreview');
+              imagePreview.innerHTML = `<img src="${e.target.result}" alt="Uploaded Image">`;
+          }
+          reader.readAsDataURL(file);
+      }
+  });
+</script>
+
+</body>
+</html>
+

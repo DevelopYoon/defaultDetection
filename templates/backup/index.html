@@ -1,0 +1,68 @@
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YOLO Model IMAGE DETECTOR</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <h1>결함 탐지</h1>
+  <div class="agile-its">
+    <h2>이미지 검출기</h2>
+    <div class="w3layouts">
+      <div class="photos-upload-view">
+        <form id="upload" action="/predict" method="POST" enctype="multipart/form-data">
+          <div class="upload-btn-wrapper">
+            <button class="btn">이미지 업로드</button>
+            <br>
+            <input type="file" value="Upload" name="image">
+          </div>
+          <br><br>
+          <input type="submit" value="이미지 예측 결과">
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YOLO Model IMAGE DETECTOR</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <h1>결함 탐지</h1>
+  <div class="agile-its">
+    <h2>이미지 검출기</h2>
+    <div class="w3layouts">
+      <div class="photos-upload-view">
+        <form id="upload" action="/predict" method="POST" enctype="multipart/form-data">
+          <div class="upload-btn-wrapper">
+            <button class="btn">이미지 업로드</button>
+            <br>
+            <input type="file" value="Upload" name="image">
+          </div>
+          <br><br>
+          <input type="submit" value="이미지 예측 결과">
+        </form>
+        
+        <div class="result">
+          {% if image_path %}
+            <h2>Prediction Result</h2>
+            <h3>Detected Image</h3>
+            <img src="{{ image_path }}" alt="Uploaded Image">
+          {% else %}
+            <p>No image detected.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+

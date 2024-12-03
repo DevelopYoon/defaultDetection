@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detection Labels Test</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+        .image-section {
+            flex: 1;
+        }
+        .data-section {
+            flex: 1;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        #imagePreview {
+            max-width: 100%;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Detection Labels Test</h1>
+    <div>
+        <h4>사용법 : curl -X GET http://211.237.0.230:22426/get_detection_labels/[example.jpg]</h4>
+        <h4>0:crack(균열)</h4>
+        <h4>1:leak(누수)</h4>
+        <h4>2:peel(박리박락)</h4>
+        <h4>3:white(백태)</h4>
+        <h4>4:rebar(철근노출)</h4>
+        
+    </div>
+    <div class="container">
+        <div class="image-section">
+            <h2>이미지 업로드</h2>
+            <input type="file" id="imageInput" accept="image/*">
+            <button class="button" onclick="processImage()">이미지 처리</button>
+            <div>
+                <img id="imagePreview">
+            </div>
+        </div>
+        
+        <div class="data-section">
+            <h2>라벨 데이터</h2>
+            <button class="button" onclick="getLabels()" id="getLabelBtn" disabled>라벨 데이터 가져오기</button>
+            <pre id="labelData">라벨 데이터가 여기에 표시됩니다.</pre>
+        </div>
+    </div>
+
+    <script>
+        let currentImageName = '';
+
+        async function processImage() {
+            const input = document.getElementById('imageInput');
+            const file = input.files[0];
+            if (!file) {
+                alert('파일을 선택해주세요.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                const response = await fetch('/', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    // 이미지 미리보기 업데이트
+                    document.getElementById('imagePreview').src = data.image_path;
+                    currentImageName = file.name;
+                    // 라벨 데이터 버튼 활성화
+                    document.getElementById('getLabelBtn').disabled = false;
+                    // 자동으로 라벨 데이터 가져오기
+                    getLabels();
+                } else {
+                    alert('이미지 처리 실패');
+                }
+            } catch (error) {
+                alert('오류 발생: ' + error);
+            }
+        }
+
+        async function getLabels() {
+            if (!currentImageName) {
+                alert('먼저 이미지를 처리해주세요.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/get_detection_labels/${currentImageName}`);
+                const data = await response.json();
+                
+                document.getElementById('labelData').textContent = 
+                    JSON.stringify(data, null, 2);
+            } catch (error) {
+                alert('라벨 데이터 가져오기 실패: ' + error);
+            }
+        }
+    </script>
+</body>
+</html>
